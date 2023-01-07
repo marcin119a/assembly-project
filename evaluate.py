@@ -77,10 +77,10 @@ count_score = 1/log(4+almcount, 5) if almtotlen else 0
 
 score = refcoverage*rdscoverage*ident_score*count_score
 
-print "Pokrycie referencji:", refcoverage
-print "Pokrycie odczytów:"  , rdscoverage
+print("Pokrycie referencji:", refcoverage)
+print("Pokrycie odczytów:"  , rdscoverage)
 #print "Błędy uliniowień:"   , almmmcount/almtotlen if almtotlen else 0
-print "Ocena identyczności:", ident_score
+print("Ocena identyczności:", ident_score)
 #print "Liczba uliniowień:"  , almcount
-print "Ocena rozdrobnienia:", count_score
-print "Łączna ocena:"       , score
+print("Ocena rozdrobnienia:", count_score)
+print("Łączna ocena:"       , score)
