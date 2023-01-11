@@ -21,7 +21,7 @@ x = 'CTCGGCCCTAGG'
 y = 'GGCTCTAGGCCC'
 
 
-def overlap(x, y, min_l=4)
+def overlap(x, y, min_l=4):
   D = np.zeros((len(x)+1, len(y)+1))
 
   for i in range(1,D.shape[1]):
