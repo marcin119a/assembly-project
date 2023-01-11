@@ -22,7 +22,7 @@ y = 'GGCTCTAGGCCC'
 
 
 
-def overlap(x, y, min_l=4):
+def overlap(x, y, min_lenght=4):
   D = np.zeros((len(x)+1, len(y)+1))
 
   for i in range(1,D.shape[1]):
@@ -33,22 +33,23 @@ def overlap(x, y, min_l=4):
       D[i][j] = min(D[i-1,j] + s(x[i-1], '-'), D[i,j-1] + s('-', y[j-1]), D[i-1,j-1]+ s(x[i-1], y[j-1])) 
 
 
-  for j in range(D.shape[0]-min_l,D.shape[0]):
+  for j in range(D.shape[0]-min_lenght,D.shape[0]):
     D[j][0] = np.Inf
   for i in range(5):
     D[D.shape[1]-1][i] = np.Inf
 
-  for i in range(D.shape[0]-min_l+1,D.shape[0]-1):
-    for j in range(1,min_l+1):
+  for i in range(D.shape[0]-min_lenght+1,D.shape[0]-1):
+    for j in range(1, min_lenght+1):
       D[i][j] = min(D[i-1,j] + s(x[i-1], '-'), D[i,j-1] + s('-', y[j-1]), D[i-1,j-1]+ s(x[i-1], y[j-1])) 
-
+  
   xf = ""
   yf = ""
   score = 0
-  for i,j in zip(range(np.argmin(D[len(y),:]),0, -1), range(len(x)-1, 0, -1)):
+  for i,j in zip(range(np.argmin(D[len(y),:]),0, -1), range(len(x), 0, -1)):
     xf += f"{y[i-1]}"
-    yf += f"{x[j]}"
-    if y[i-1] == x[j]:
+    yf += f"{x[j-1]}"
+    if y[i-1] == x[j-1]:
       score += 1
+      print(i,j)
 
-  return score, xf, yf
+  return score, xf[::-1], yf[::-1]
