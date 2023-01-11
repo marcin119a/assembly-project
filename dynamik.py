@@ -21,6 +21,7 @@ x = 'CTCGGCCCTAGG'
 y = 'GGCTCTAGGCCC'
 
 
+
 def overlap(x, y, min_l=4):
   D = np.zeros((len(x)+1, len(y)+1))
 
@@ -43,10 +44,11 @@ def overlap(x, y, min_l=4):
 
   xf = ""
   yf = ""
+  score = 0
   for i,j in zip(range(np.argmin(D[len(y),:]),0, -1), range(len(x)-1, 0, -1)):
     xf += f"{y[i-1]}"
     yf += f"{x[j]}"
     if y[i-1] == x[j]:
-      score += 0
+      score += 1
 
   return score, xf, yf
