@@ -30,7 +30,7 @@ void debug(vector<vector<int>> vec){
     }
 }
 
-int overlap(string x, string y){
+int overlap(string x, string y, int min_length){
     vector<vector<int>> D ((x.size() + 1), vector<int> (y.size() + 1) );
 
 
@@ -48,21 +48,13 @@ int overlap(string x, string y){
         }
     }
 
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < min_length; i++){
         D[x.size()][i] = INT_MAX / 2;
     }
-    debug(D);
     vector<int> v = D[x.size()];
     return distance(v.begin(), min_element(v.begin(), v.end()));
 }
 
-/*int main() {
-    string x = "CTCGGCCCTAGG";
-    string y = "GGCTCTAGGCCC";
-    cout << overlap(x,y);
-    cout << "Hello, World!" << endl;
-    return 0;
-} */
 
 vector<string> read_file(int argc, char **argv){
     if (argc < 2) {
@@ -83,7 +75,6 @@ vector<string> read_file(int argc, char **argv){
 
         if (line[0] == '>') {
             if(!id.empty()) {
-                cout << id << " : " << DNA_sequence << endl;
                 reads.push_back(DNA_sequence);
             }
             id = line.substr(1);
@@ -95,13 +86,25 @@ vector<string> read_file(int argc, char **argv){
         i += 1;
     }
 
-    if(!id.empty())
-        std::cout << id << " : " << DNA_sequence << std::endl;
+
     return reads;
 }
 
 int main(int argc, char **argv) {
+    ofstream myfile ("../output.txt");
+
+    int minLenght = 10;
     vector<string> reads = read_file(argc, argv);
-
-
+    if (myfile.is_open()) {
+        for (string a: reads) {
+            for (string b: reads) {
+                if (a != b) {
+                    myfile << overlap(a, b, minLenght) << " " << a <<  " " << b << "\n";
+                }
+            }
+        }
+    } else {
+        cout << "Unable to open file";
+    }
+    myfile.close();
 }
