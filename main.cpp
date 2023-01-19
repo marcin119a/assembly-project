@@ -6,16 +6,12 @@ using namespace std;
 
 
 int s(char a, char b) {
-    if (a == '-' || b == '-'){
-        return 8;
-    }
     if (a == b){
         return 0;
     }
-    if ((a == 'A' && b != 'G') || (a == 'C' && b != 'T') || (a == 'G' && b != 'A') || (a == 'T' && b != 'C')) {
-        return 4;
+    if (a != b) {
+        return 1;
     }
-    return 2;
 
 }
 
@@ -26,33 +22,38 @@ void debug(vector<vector<int>> vec){
         {
             cout << vec[i][j] << " ";
         }
-        cout << "\n";
     }
 }
 
-int overlap(string x, string y, int min_length){
+vector<float> overlap(string x, string y, int min_length){
     vector<vector<int>> D ((x.size() + 1), vector<int> (y.size() + 1) );
-
-
+    vector<int> sx(x.size() + 1);
+    vector<int> sy(y.size() + 1) ;
 
     for (int i = 1; i < (x.size() + 1); i++){
-        for(int j = 1; j < (y.size() + 1); j++) {
-            D[0][j] = INT_MAX / 2;
-            int a = D[i-1][j] + s(x[i-1], '-');
-            int b = D[i][j-1] + s('-', y[j-1]);
-            int c = D[i-1][j-1] + s(x[i-1], y[j-1]);
-
-            D[i][j] = min(min(a,b), c);
-            //cout << D[i][j] + s(x[i-1], '-') << endl;
-            //cout << x[i] << endl;
+        int p = 1;
+        while (p <= i ) {
+            sx[x.size() - (i-p)] = sx[x.size() - (i-p)] + s(x[i-1], y[p-1]);
+            sy[y.size() - (i-p)] = sy[y.size() - (i-p)] + s(x[p-1], y[i-1]);
+            p += 1;
         }
     }
 
-    for(int i = 0; i < min_length; i++){
-        D[x.size()][i] = INT_MAX / 2;
+    for(int i = 0; i < min_length; i++){ //horizontal
+        sx[i] = INT_MAX / 2;
     }
-    vector<int> v = D[x.size()];
-    return distance(v.begin(), min_element(v.begin(), v.end()));
+    for(int j = 0; j < min_length; j++){ //vertical
+        sy[j] = INT_MAX / 2;
+    }
+
+
+    int a = distance(sx.begin(), min_element(sx.begin(), sx.end()));
+    int b = distance(sy.begin(), min_element(sy.begin(), sy.end()));
+
+
+    vector<float> r = {float(sx[a])/ a, float(sy[b]) / b, float(a), float(b)};
+
+    return r;
 }
 
 
@@ -90,16 +91,17 @@ vector<string> read_file(int argc, char **argv){
     return reads;
 }
 
-int main(int argc, char **argv) {
-    ofstream myfile ("../output.txt");
+void save(string filename, int argc, char **argv){
+    ofstream myfile (filename);
 
-    int minLenght = 10;
+    int minLenght = 20;
     vector<string> reads = read_file(argc, argv);
     if (myfile.is_open()) {
         for (string a: reads) {
             for (string b: reads) {
-                if (a != b) {
-                    myfile << overlap(a, b, minLenght) << " " << a <<  " " << b << "\n";
+                if (a < b) {
+                    vector<float> v = overlap(a, b, minLenght);
+                    myfile << v[0] << " " << v[1] << " " << v[2] << " " << v[3] << "" << a <<  " " << b << " " << "\n";
                 }
             }
         }
@@ -107,4 +109,10 @@ int main(int argc, char **argv) {
         cout << "Unable to open file";
     }
     myfile.close();
+}
+
+int main(int argc, char **argv) {
+    save("../ouputs.txt", argc, argv);
+    //vector<float> v = overlap("ACTG", "ACCT", 1);
+    //cout << v[0] << " " << v[1]  << " " << v[2] << v[3];
 }
