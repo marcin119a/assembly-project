@@ -91,28 +91,67 @@ vector<string> read_file(int argc, char **argv){
     return reads;
 }
 
-void save(string filename, int argc, char **argv){
-    ofstream myfile (filename);
-
-    int minLenght = 20;
-    vector<string> reads = read_file(argc, argv);
-    if (myfile.is_open()) {
-        for (string a: reads) {
-            for (string b: reads) {
-                if (a < b) {
-                    vector<float> v = overlap(a, b, minLenght);
-                    myfile << v[0] << " " << v[1] << " " << v[2] << " " << v[3] << "" << a <<  " " << b << " " << "\n";
+#define OLEN_AB 2
+#define OLEN_BA 3
+pair<vector<string>, int> pick_maximal_overlap(vector<string> reads, int k){
+    string reada = "";
+    string readb = "";
+    int best_olen = 0;
+    for (string a: reads) { // tu jest jakiś problem ?
+        for (string b: reads){
+            if (a < b){
+                vector<float> v = overlap(a, b, k);
+                cout << v[2] << "---" << v[3] << " ... ";
+                if (v[OLEN_AB] > best_olen){ //
+                    best_olen = v[OLEN_AB];
+                    reada = a;
+                    readb = b;
+                }
+                if (v[OLEN_BA] > best_olen) {
+                    best_olen = v[OLEN_BA];
+                    reada = b;
+                    readb = a;
                 }
             }
         }
-    } else {
-        cout << "Unable to open file";
     }
-    myfile.close();
+    vector<string> read = {reada, readb};
+    pair<vector<string>, int> r = {read, best_olen};
+    return r;
+}
+
+vector<string> greedy_scs(vector<string> reads, int k){
+    pair<vector<string>, int> r = pick_maximal_overlap(reads, k);
+    string reada = r.first[0];
+    string readb = r.first[1];
+    int olen = r.second;
+    cout << olen;
+
+    while (olen > 0){
+        remove(reads.begin(),reads.end(),reada);
+        remove(reads.begin(),reads.end(),readb);
+        string outr = readb.substr(olen, readb.size());
+        cout << " " << reada + outr;
+
+        reads.push_back(reada + outr);
+
+        r = pick_maximal_overlap(reads, k);
+        reada = r.first[0];
+        readb = r.first[1];
+        olen = r.second;
+    }
+    return reads;
 }
 
 int main(int argc, char **argv) {
-    save("../ouputs.txt", argc, argv);
+    vector<string> reads = {"CTCGGCCCTAGG", "GGCTCTAGGCCC"};
+    int k = 5;
+    //vector<float> r = overlap("CTCGGCCCTAGG", "GGCTCTAGGCCC", k);
+    //cout << r[2] << " ";
+    //cout << r[3];
+    vector<string> rrrr = greedy_scs(reads, k);
+    std::cout << rrrr[0];
+    //save("../ouputs.txt", argc, argv);
     //vector<float> v = overlap("ACTG", "ACCT", 1);
     //cout << v[0] << " " << v[1]  << " " << v[2] << v[3];
 }
