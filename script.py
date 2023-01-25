@@ -14,7 +14,6 @@ parser.add_argument('-size', '--minimal_size_contig', type=int)
 
 args = parser.parse_args()
 
-
 percent_of_mismatches = args.percent_of_mismatches
 S1 = 2
 S2 = 3
@@ -37,7 +36,6 @@ with open(args.filename_overlap, newline='\n') as csvfile:
 
 
 
-# Set to keep track of visited nodes of graph.
 OVERLAP = 1
 PAIR_B = 0
 THE_BEST = 0
@@ -59,7 +57,6 @@ def dfs(visited, graph, node, contig):
 
 
 # Driver Code
-print("Following is the Depth-First Search")
 nodes = []
 for key in graph:
     nodes.append(key)
@@ -76,12 +73,14 @@ for node in nodes:
     else:
         visited = visited.difference(visited_temp)
 
-
 if __name__ == "__main__":
-    file = open(f"{percent_of_mismatches}_{minimal_size_contig}_{args.output_fasta}", 'w')
+
+    file = open(f"{args.output_fasta}", 'w')
     for i, conf in enumerate(contigss):
         r = f">read_{i}\n"
         for text in textwrap.wrap(conf, 60):
             r += f"{text}\n"
         file.write(r)
     file.close()
+    print(f"Plik został utworzony {args.output_fasta}")
+
