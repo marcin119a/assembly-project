@@ -1,25 +1,12 @@
 import pandas as pd
+import itertools
 
 columns = ['a-bs', 'b-as', 's1', 's2', 'a', 'b', '?']
-df = pd.read_csv('/content/drive/MyDrive/Untitled Folder/ouputs_fasta_3.10.txt', sep=' ')
+df = pd.read_csv('/puts_fasta_3.10.txt', sep=' ')
 df.columns = columns
 df.head()
 
 from collections import defaultdict 
-
-def compute_overlaps(reads, k):
-  graph = defaultdict(set)
-  for a, b in itertools.permutations(reads, 2):
-      olen1 = overlap(a, b, min_length=k)
-      #olen2 = overlap(b, a, min_length=k)
-      #todo sorted dictonary  
-      #if olen1 >= olen2 and olen1 > 0: 
-      if olen1 > 0:
-        graph[a].add((b, olen1))
-      #if olen1 < olen2 and olen2 > 0:
-      #  graph[b].add((a, olen2))
-
-  return graph 
 
 
 # Set to keep track of visited nodes of graph.

@@ -2,6 +2,8 @@
 #include <fstream>
 #include <vector>
 #include <algorithm>
+#include <cstdlib>
+#define INT_MAX 2147483647
 using namespace std;
 
 
@@ -12,7 +14,7 @@ int s(char a, char b) {
     if (a != b) {
         return 1;
     }
-
+    return 0;
 }
 
 void debug(vector<vector<int>> vec){
@@ -146,8 +148,8 @@ vector<string> greedy_scs(vector<string> reads, int k){
 }
 
 
-void save(string filename, int argc, char **argv,  int k){
-    ofstream myfile (filename);
+void save(int argc, char **argv,  int k){
+    ofstream myfile (argv[2]);
 
     vector<string> reads = read_file(argc, argv);
     if (myfile.is_open()) {
@@ -155,7 +157,7 @@ void save(string filename, int argc, char **argv,  int k){
             for (string b: reads) {
                 if (a < b) {
                     vector<float> v = overlap(a, b, k);
-                    myfile << v[0] << " " << v[1] << " " << v[2] << " " << v[3] << " " << a <<  " " << b << " " << "\n";
+                    myfile << v[0] << ";" << v[1] << ";" << v[2] << ";" << v[3] << ";" << a <<  ";" << b << ";" << "\n";
                 }
             }
         }
@@ -167,10 +169,7 @@ void save(string filename, int argc, char **argv,  int k){
 
 int main(int argc, char **argv) {
     vector<string> reads = read_file(argc, argv);
-    //vector<string> rrrr = greedy_scs(reads, k);
-    //cout << rrrr[0];
-    int k = 5;
-    save("../ouputs.txt", argc, argv, k);
-    //vector<float> v = overlap("ACTG", "ACCT", 1);
-    //cout << v[0] << " " << v[1]  << " " << v[2] << v[3];
+    int k = atoi(argv[3]);
+    save(argc, argv, k);
+
 }
