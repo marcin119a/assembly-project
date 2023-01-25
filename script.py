@@ -8,6 +8,16 @@ df.head()
 
 from collections import defaultdict 
 
+PERCENT_OF_MISSMATCHES = 0.30
+
+from collections import defaultdict 
+graph = defaultdict(set)
+for i in df.index:
+  if float(df.loc[i]['a-bs']) < PERCENT_OF_MISSMATCHES:
+    graph[df.loc[i]['a']].add((df.loc[i]['b'], int(df.loc[i]['s1'])))
+
+  if float(df.loc[i]['b-as']) < PERCENT_OF_MISSMATCHES:
+    graph[df.loc[i]['b']].add((df.loc[i]['a'], int(df.loc[i]['s2'])))
 
 # Set to keep track of visited nodes of graph.
 OVERLAP = 1
