@@ -1,23 +1,33 @@
 import pandas as pd
 from collections import defaultdict
 import textwrap
+import argparse
+
+parser = argparse.ArgumentParser(
+    prog = 'Assembly project'
+)
+parser.add_argument('-f', '--filename_overlap')
+parser.add_argument('-o', '--output_fasta')
+parser.add_argument('-pm', '--percent_of_mismatches', type=float)
+parser.add_argument('-size', '--minimal_size_contig', type=int)
+
+args = parser.parse_args()
 
 
 columns = ['a-bs', 'b-as', 's1', 's2', 'a', 'b', '?']
-df = pd.read_csv('/puts_fasta_3.10.txt', sep=' ')
+df = pd.read_csv(args.filename_overlap, sep=';')
 df.columns = columns
 df.head()
 
-
-PERCENT_OF_MISSMATCHES = 0.30
+percent_of_mismatches = args.percent_of_mismatches
 
 
 graph = defaultdict(set)
 for i in df.index:
-    if float(df.loc[i]['a-bs']) < PERCENT_OF_MISSMATCHES:
+    if float(df.loc[i]['a-bs']) < percent_of_mismatches:
         graph[df.loc[i]['a']].add((df.loc[i]['b'], int(df.loc[i]['s1'])))
 
-    if float(df.loc[i]['b-as']) < PERCENT_OF_MISSMATCHES:
+    if float(df.loc[i]['b-as']) < percent_of_mismatches:
         graph[df.loc[i]['b']].add((df.loc[i]['a'], int(df.loc[i]['s2'])))
 
 # Set to keep track of visited nodes of graph.
@@ -53,16 +63,17 @@ for node in nodes:
     ovcontigs = []
     contig = node
     dfs(visited, graph, (node, 0), contig)
-    if len("".join(ovcontigs)) > 320:
+    if len("".join(ovcontigs)) > args.minimal_size_contig:
         contigss.append("".join(ovcontigs))
     else:
         visited = visited.difference(visited_temp)
 
 
-file = open('ouput3.fasta', 'w')
-for i, conf in enumerate(contigss):
-    r = f">read_{i}\n"
-    for text in textwrap.wrap(conf, 60):
-        r += f"{text}\n"
-    file.write(r)
-file.close()
+if __name__ == "__main__":
+    file = open(args.output_fasta, 'w')
+    for i, conf in enumerate(contigss):
+        r = f">read_{i}\n"
+        for text in textwrap.wrap(conf, 60):
+            r += f"{text}\n"
+        file.write(r)
+    file.close()
