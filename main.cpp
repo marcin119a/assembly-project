@@ -17,15 +17,6 @@ int s(char a, char b) {
     return 0;
 }
 
-void debug(vector<vector<int>> vec){
-    for (int i = 0; i < vec.size(); i++)
-    {
-        for (int j = 0; j < vec[i].size(); j++)
-        {
-            cout << vec[i][j] << " ";
-        }
-    }
-}
 
 vector<float> overlap(string x, string y, int min_length){
     vector<vector<int>> D ((x.size() + 1), vector<int> (y.size() + 1) );
@@ -101,7 +92,7 @@ pair<vector<string>, int> pick_maximal_overlap(vector<string> reads, int k){
     int best_olen = 0;
     if (reads.size() == 1){ return {{"", ""}, 0};}
 
-    for (string a: reads) { // tu jest jakiś problem ?
+    for (string a: reads) {
         for (string b: reads){
             if (a < b){
                 vector<float> v = overlap(a, b, k);
@@ -123,29 +114,6 @@ pair<vector<string>, int> pick_maximal_overlap(vector<string> reads, int k){
     return r;
 }
 
-
-
-vector<string> greedy_scs(vector<string> reads, int k){
-    pair<vector<string>, int> r = pick_maximal_overlap(reads, k);
-    string reada = r.first[0];
-    string readb = r.first[1];
-    int olen = r.second;
-    vector<string> contigs = {};
-    while (olen > 0){
-        reads.erase(remove(reads.begin(), reads.end(), reada), reads.end());
-        reads.erase(remove(reads.begin(), reads.end(), readb), reads.end());
-        string outr = readb.substr(olen, readb.size());
-
-        reads.push_back(reada + outr);
-
-        r = pick_maximal_overlap(reads, k);
-        reada = r.first[0];
-        readb = r.first[1];
-        olen = r.second;
-    }
-
-    return reads;
-}
 
 
 void save(int argc, char **argv,  int k){
