@@ -17,7 +17,10 @@ int s(char a, char b) {
     return 0;
 }
 
-
+/*
+memory O(k)
+complexity O(k^2)
+*/
 vector<float> overlap(string x, string y, int min_length){
     vector<vector<int>> D ((x.size() + 1), vector<int> (y.size() + 1) );
     vector<int> sx(x.size() + 1);
@@ -44,7 +47,7 @@ vector<float> overlap(string x, string y, int min_length){
     int b = distance(sy.begin(), min_element(sy.begin(), sy.end()));
 
 
-    vector<float> r = {float(sx[a])/ a, float(sy[b]) / b, float(a), float(b)};
+    vector<float> r = {float(sx[a]), float(sy[b]), float(a), float(b)};
 
     return r;
 }
@@ -125,7 +128,8 @@ void save(int argc, char **argv,  int k){
             for (string b: reads) {
                 if (a < b) {
                     vector<float> v = overlap(a, b, k);
-                    myfile << v[0] << ";" << v[1] << ";" << v[2] << ";" << v[3] << ";" << a <<  ";" << b << ";" << "\n";
+                    myfile << a << ";" << "1" << ";" << b << ";" <<  "-1" << ";" <<  v[2] << ";" << v[0] << "\n";
+                    myfile << b << ";" << "1" << ";" << a << ";" <<  "-1" << ";" << v[3] << ";" << v[1] << "\n";
                 }
             }
         }
