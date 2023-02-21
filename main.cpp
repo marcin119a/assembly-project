@@ -1,10 +1,9 @@
-
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <algorithm>
 #include <cstdlib>
-#define INT_MAX 2147483647
+#define DYN_MAX 2.0f
 using namespace std;
 
 
@@ -39,16 +38,16 @@ vector<float> overlap(string x, string y, int min_length){
 
     for(int i = 0; i < (x.size() + 1); i++){ //horizontal
         if (i < min_length) {
-            sxf[i] = INT_MAX / 2;
+            sxf[i] = DYN_MAX;
         } else {
-            sxf[i] = sx[i] / (i+1);
+            sxf[i] = float(sx[i]) / (i+1);
         }
     }
     for(int j = 0; j < (y.size() + 1); j++){ //vertical
         if (j < min_length) {
-            syf[j] = INT_MAX / 2;
+            syf[j] = DYN_MAX;
         } else {
-            syf[j] = sy[j] / (j+1);
+            syf[j] = float(sy[j]) / (j+1);
         }
     }
 
