@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -22,9 +23,10 @@ memory O(k)
 complexity O(k^2)
 */
 vector<float> overlap(string x, string y, int min_length){
-    vector<vector<int>> D ((x.size() + 1), vector<int> (y.size() + 1) );
     vector<int> sx(x.size() + 1);
-    vector<int> sy(y.size() + 1) ;
+    vector<int> sy(y.size() + 1);
+    vector<float> sxf(x.size() + 1);
+    vector<float> syf(y.size() + 1);
 
     for (int i = 1; i < (x.size() + 1); i++){
         int p = 1;
@@ -35,16 +37,24 @@ vector<float> overlap(string x, string y, int min_length){
         }
     }
 
-    for(int i = 0; i < min_length; i++){ //horizontal
-        sx[i] = INT_MAX / 2;
+    for(int i = 0; i < (x.size() + 1); i++){ //horizontal
+        if (i < min_length) {
+            sxf[i] = INT_MAX / 2;
+        } else {
+            sxf[i] = sx[i] / (i+1);
+        }
     }
-    for(int j = 0; j < min_length; j++){ //vertical
-        sy[j] = INT_MAX / 2;
+    for(int j = 0; j < (y.size() + 1); j++){ //vertical
+        if (j < min_length) {
+            sy[j] = INT_MAX / 2;
+        } else {
+            sxf[j] = sx[j] / (j+1);
+        }
     }
 
-
-    int a = distance(sx.begin(), min_element(sx.begin(), sx.end()));
-    int b = distance(sy.begin(), min_element(sy.begin(), sy.end()));
+    //argmin
+    int a = distance(sxf.begin(), min_element(sxf.begin(), sxf.end()));
+    int b = distance(syf.begin(), min_element(syf.begin(), syf.end()));
 
 
     vector<float> r = {float(sx[a]), float(sy[b]), float(a), float(b)};
