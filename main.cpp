@@ -46,9 +46,9 @@ vector<float> overlap(string x, string y, int min_length){
     }
     for(int j = 0; j < (y.size() + 1); j++){ //vertical
         if (j < min_length) {
-            sy[j] = INT_MAX / 2;
+            syf[j] = INT_MAX / 2;
         } else {
-            sxf[j] = sx[j] / (j+1);
+            syf[j] = sy[j] / (j+1);
         }
     }
 
