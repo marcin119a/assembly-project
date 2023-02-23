@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cstdlib>
 #define DYN_MAX 2.0f
+#define INT_MAX 2147483647
 using namespace std;
 
 
@@ -39,6 +40,7 @@ vector<float> overlap(string x, string y, int min_length){
     for(int i = 0; i < (x.size() + 1); i++){ //horizontal
         if (i < min_length) {
             sxf[i] = DYN_MAX;
+            sx[i] = INT_MAX/2;
         } else {
             sxf[i] = float(sx[i]) / (i+1);
         }
@@ -46,6 +48,7 @@ vector<float> overlap(string x, string y, int min_length){
     for(int j = 0; j < (y.size() + 1); j++){ //vertical
         if (j < min_length) {
             syf[j] = DYN_MAX;
+            sy[j] = INT_MAX/2;
         } else {
             syf[j] = float(sy[j]) / (j+1);
         }
