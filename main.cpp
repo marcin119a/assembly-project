@@ -52,8 +52,8 @@ vector<float> overlap(string x, string y, int min_length){
     }
 
     //argmin
-    int a = distance(sxf.begin(), min_element(sxf.begin(), sxf.end()));
-    int b = distance(syf.begin(), min_element(syf.begin(), syf.end()));
+    int a = distance(max_element(sxf.begin(), sxf.end()), syf.end());
+    int b = distance(max_element(syf.begin(), syf.end()), syf.end());
 
 
     vector<float> r = {float(sx[a]), float(sy[b]), float(a), float(b)};
