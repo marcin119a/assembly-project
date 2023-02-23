@@ -12,9 +12,32 @@ int s(char a, char b) {
     if (a == b){
         return 0;
     }
-    if (a != b) {
-        return 1;
+    if (a == 'A' & (b == 'C' ||  b == 'T')) {
+        return 4;
     }
+    if (a == 'A' & (b == 'G')) {
+        return 2;
+    }
+    if (a == 'C' & (b == 'A' ||  b == 'G')) {
+        return 4;
+    }
+    if (a == 'C' & (b == 'T')) {
+        return 2;
+    }
+    if (a == 'G' & (b == 'C' ||  b == 'T')) {
+        return 4;
+    }
+    if (a == 'G' & (b == 'A')) {
+        return 2;
+    }
+    if (a == 'T' & (b == 'A' ||  b == 'G')) {
+        return 4;
+    }
+    if (a == 'T' & (b == 'C')) {
+        return 2;
+    }
+
+
     return 0;
 }
 
